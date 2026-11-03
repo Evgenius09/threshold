@@ -1,5 +1,6 @@
 package io.github.evgenius09.threshold;
 
+import io.github.evgenius09.threshold.registry.ModItems;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ public class Threshold implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModItems.init();
 		LOGGER.info("Threshold loaded");
 	}
 
