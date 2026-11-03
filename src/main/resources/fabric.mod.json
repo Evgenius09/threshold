@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "threshold_gates",
+  "version": "${version}",
+  "name": "Threshold",
+  "description": "Body built from organs, elements and the law of Subjugation.",
+  "authors": ["Evgenius09"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/threshold_gates/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["io.github.evgenius09.threshold.Threshold"],
+    "client": ["io.github.evgenius09.threshold.client.ThresholdClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

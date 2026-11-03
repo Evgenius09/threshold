@@ -1,0 +1,31 @@
+name: build
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+      - name: setup gradle
+        uses: gradle/actions/setup-gradle@v6
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: build
+        run: ./gradlew build
+      - name: upload mod jar
+        uses: actions/upload-artifact@v7
+        with:
+          name: threshold-jar
+          path: |
+            build/libs/threshold_gates-*.jar
+            !build/libs/*-sources.jar
+          if-no-files-found: error
+          retention-days: 7
