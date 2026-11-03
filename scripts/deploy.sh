@@ -53,9 +53,26 @@ adb_ push "$JAR" "$INSTANCE/mods/" >/dev/null
 echo "pushed $(basename "$JAR")"
 
 # 4. Restart game and press «Запустить»
+CRASH_DIR="$INSTANCE/crash-reports"
+
+# The previous session's log already lists threshold_gates, so it must not survive the relaunch.
+prepare_log() {
+	rsh "rm -f '$LOG_REMOTE'"
+}
+
+# Minecraft writes crash reports to files; latest.log may not mention them.
+snapshot_crashes() {
+	CRASHES_BEFORE="$(rsh "ls '$CRASH_DIR' 2>/dev/null" || true)"
+}
+
+start_launcher() {
+	adb_ shell monkey -p "$PKG" -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1 || die "cannot start $PKG"
+}
+
 adb_ shell am force-stop "$PKG"
-LAUNCH_TS="$(rsh 'date +%s' | tr -d '\r')"
-adb_ shell monkey -p "$PKG" -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1
+prepare_log
+snapshot_crashes
+start_launcher
 
 tap_text() {
 	rsh 'uiautomator dump /sdcard/threshold-ui.xml' >/dev/null 2>&1 || return 1
@@ -79,15 +96,21 @@ done
 echo "game starting..."
 
 # 5. Wait for the mod list in a log written after launch
+# prepare_log removed the old file, so any latest.log now belongs to the new game.
 log_fresh() {
-	local m
-	m="$(rsh "stat -c %Y '$LOG_REMOTE' 2>/dev/null" | tr -d '\r')"
-	[ -n "$m" ] && [ "$m" -ge "$LAUNCH_TS" ]
+	rsh "[ -f '$LOG_REMOTE' ]"
 }
 pull_log() { rsh "cat '$LOG_REMOTE'" >"$OUT/latest.log" 2>/dev/null || true; }
 check_crash() {
-	if grep -qE 'Crash report|---- Minecraft Crash Report' "$OUT/latest.log"; then return 0; fi
-	grep -iE '(ERROR|Exception)' "$OUT/latest.log" | grep -qi 'threshold'
+	local now
+	now="$(rsh "ls '$CRASH_DIR' 2>/dev/null" || true)"
+	[ "$now" != "$CRASHES_BEFORE" ] && return 0
+	# One awk process: a grep pipeline under pipefail hides matches when grep -q exits early (SIGPIPE).
+	awk 'BEGIN { f = 1 }
+		/Crash report|---- Minecraft Crash Report/ { f = 0 }
+		{ l = tolower($0) }
+		(l ~ /error|exception/) && (l ~ /threshold/) { f = 0 }
+		END { exit f }' "$OUT/latest.log"
 }
 report_fail() {
 	echo "---- last 30 lines of build/deploy/latest.log ----" >&2
