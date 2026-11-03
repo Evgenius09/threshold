@@ -72,7 +72,8 @@ launched=0
 for _ in $(seq 1 10); do
 	sleep 2
 	if tap_text "Запустить"; then launched=1; break; fi
-	tap_text "Главное меню" || true
+	# The launcher opens popups (sponsors, news) on start that hide the main screen.
+	tap_text "Закрыть" || tap_text "Главное меню" || true
 done
 [ "$launched" -eq 1 ] || die "launcher button «Запустить» not found"
 echo "game starting..."
