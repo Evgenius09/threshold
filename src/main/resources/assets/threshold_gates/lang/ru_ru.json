@@ -1,3 +1,10 @@
 {
-  "item.threshold_gates.debug_shard": "Осколок порога (тест)"
+  "item.threshold_gates.shadow_gland": "Теневая железа",
+  "item.threshold_gates.shadow_gland.lore": "Сочится тьмой даже на свету.",
+  "item.threshold_gates.thunder_fang": "Громовой клык",
+  "item.threshold_gates.thunder_fang.lore": "Гудит перед грозой.",
+  "item.threshold_gates.organ.element": "Стихия: %s",
+  "element.threshold_gates.steel": "Сталь",
+  "element.threshold_gates.storm": "Гроза",
+  "element.threshold_gates.shadow": "Тень"
 }
