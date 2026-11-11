@@ -23,7 +23,15 @@ class LangTest {
 			"item.threshold_gates.organ.element",
 			"element.threshold_gates.steel",
 			"element.threshold_gates.storm",
-			"element.threshold_gates.shadow");
+			"element.threshold_gates.shadow",
+			"slot.threshold_gates.arms",
+			"slot.threshold_gates.legs",
+			"slot.threshold_gates.back",
+			"slot.threshold_gates.core",
+			"container.threshold_gates.anatomy",
+			"key.categories.threshold_gates",
+			"key.threshold_gates.anatomy",
+			"message.threshold_gates.system.graft");
 
 	private static JsonObject lang() throws IOException {
 		return JsonParser.parseString(Files.readString(RU_RU)).getAsJsonObject();
