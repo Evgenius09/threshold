@@ -6,5 +6,13 @@
   "item.threshold_gates.organ.element": "Стихия: %s",
   "element.threshold_gates.steel": "Сталь",
   "element.threshold_gates.storm": "Гроза",
-  "element.threshold_gates.shadow": "Тень"
+  "element.threshold_gates.shadow": "Тень",
+  "slot.threshold_gates.arms": "Руки",
+  "slot.threshold_gates.legs": "Ноги",
+  "slot.threshold_gates.back": "Спина",
+  "slot.threshold_gates.core": "Ядро",
+  "container.threshold_gates.anatomy": "Анатомия",
+  "key.categories.threshold_gates": "Threshold",
+  "key.threshold_gates.anatomy": "Анатомия",
+  "message.threshold_gates.system.graft": "[Система] Орган прижился: %s, слот «%s»."
 }
